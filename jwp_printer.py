@@ -4,6 +4,7 @@ import logging
 import time
 import os
 import sys
+import pprint
 from keys import JWPLAYER_FC_KEY, JWPLAYER_FC_SECRET
 
 # ### Input of date range to today
@@ -62,8 +63,9 @@ def video_lister(result_limit=1000,start_date=1539129600):
         if offset >= last_query_total:  # Condition which defines you've reached the end of the library
             break
         return(videos)
-
-
+# json_obj = video_lister(1)
+# pp = pprint.PrettyPrinter(width=41, compact= True)
+# pp.pprint(json_obj)
 def print_video_ids_missing_keys(result_limit=1000):
     video_list = video_lister(result_limit=result_limit)
     missing_series = []
@@ -71,16 +73,16 @@ def print_video_ids_missing_keys(result_limit=1000):
     for video in video_list:
         if 'custom' in video:
             if 'series' not in video['custom'] and 'category' not in video['custom']: 
-                print(f"Video {video['title']} (key = {video['key']}) is missing both category and series")
+                print(f"Video key = {video['key']} is missing both category and series")
                 missing_series.append(video['key'])
                 missing_category.append(video['key'])
                 ### Add click to apply function
             elif 'series' not in video['custom']:
-                print(f"Video {video['title']} (key = {video['key']}) is missing SERIES custom parameter")
+                print(f"Video key = {video['key']} is missing SERIES custom parameter")
                 missing_series.append(video['key'])
                 ### Add click to apply functionif  
             elif 'category' not in video['custom']:
-                print(f"Video {video['title']} (key = {video['key']}) is missing the CATEGORY custom parameter")
+                print(f"Video key = {video['key']} is missing the CATEGORY custom parameter")
                 missing_category.append(video['key'])
             # else:
             #     print(f"Video ID = {video['key']} made {video['date']}is CATEGORY: {video['custom']['category']} and SERIES: {video['custom']['series']}")
@@ -88,5 +90,6 @@ def print_video_ids_missing_keys(result_limit=1000):
     return missing_category, missing_series
 
 print_video_ids_missing_keys(result_limit=100)
+
 
 
